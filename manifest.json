@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Crypto Price Peek",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Highlight a coin symbol (BTC, ETH, WLD...), right-click to view its USD price from CoinGecko in a small pop-up directly on the page.",
   "permissions": [
     "contextMenus",
