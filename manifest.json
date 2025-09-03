@@ -1,12 +1,11 @@
 {
   "manifest_version": 3,
   "name": "Crypto Price Peek",
-  "version": "1.0.0",
-  "description": "Bôi đen ký hiệu coin (BTC, ETH, WLD...), click chuột phải để xem giá USD từ CoinGecko trong pop-up nhỏ ngay trên trang.",
+  "version": "1.1.0",
+  "description": "Highlight a coin symbol (BTC, ETH, WLD...), right-click to view its USD price from CoinGecko in a small pop-up directly on the page.",
   "permissions": [
     "contextMenus",
-    "activeTab",
-    "scripting"
+    "activeTab"
   ],
   "host_permissions": [
     "https://api.coingecko.com/*"

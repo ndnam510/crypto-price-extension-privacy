@@ -123,8 +123,21 @@
     </div>
   </div>
 
+  <div id="manual-check" style="background: rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+    <div style="font-weight:600; font-size:14px; margin-bottom:8px;">Tự nhập ký hiệu coin</div>
+    <div style="display:flex; gap:8px;">
+      <input id="ticker-input" type="text" placeholder="VD: BTC, ETH" style="flex:1; padding:8px 10px; border-radius:6px; border:none; outline:none; font-size:14px;">
+      <button id="check-btn" style="background:#ffffff; color:#4a3db8; border:none; border-radius:6px; padding:8px 12px; font-weight:600; cursor:pointer;">OK</button>
+    </div>
+    <div id="result" style="margin-top:10px; font-size:14px; min-height:18px; opacity:0.95;"></div>
+  </div>
+
   <div class="footer">
     Dữ liệu từ CoinGecko API
   </div>
+  <div style="text-align: center; margin-top: 8px;">
+    <a href="privacy.html" target="_blank" style="color: rgba(255,255,255,0.6); text-decoration: none; font-size: 11px;">Chính sách bảo mật</a>
+  </div>
+  <script src="popup.js"></script>
 </body>
 </html>
