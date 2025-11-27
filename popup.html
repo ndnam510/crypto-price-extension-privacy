@@ -1,143 +1,245 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Crypto Price Checker</title>
+
   <style>
-    body {
-      width: 300px;
-      padding: 20px;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      margin: 0;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+    /* ===== Global Reset ===== */
+    * {
+      box-sizing: border-box;
     }
-.header {
-  text-align: center;
-  margin-bottom: 20px;
-}
 
-.logo {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 8px;
-}
+    body {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: rgba(255, 255, 255, 0.95);
+      overflow-x: hidden;
+      overflow-y: auto;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.25) 0%, transparent 60%),
+                  radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.25) 0%, transparent 60%),
+                  radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.25) 0%, transparent 60%),
+                  radial-gradient(circle at 60% 60%, rgba(255, 215, 0, 0.2) 0%, transparent 60%),
+                  linear-gradient(135deg, #31302e 0%, #282623 30%, #111110 70%, #23221e 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 25s ease-in-out infinite;
+      position: relative;
+    }
 
-.subtitle {
-  font-size: 14px;
-  opacity: 0.8;
-}
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
 
-.instructions {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 20px;
-  backdrop-filter: blur(10px);
-}
+    /* ===== Frosted Glass Effect ===== */
+    .glass {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
 
-.step {
-  margin-bottom: 12px;
-  font-size: 14px;
-  line-height: 1.4;
-}
+    .glass:hover {
+      background: rgba(255, 255, 255, 0.18);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 36px rgba(31, 38, 135, 0.25);
+    }
 
-.step:last-child {
-  margin-bottom: 0;
-}
+    /* ===== Header ===== */
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 2;
+    }
 
-.step-number {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: bold;
-  margin-right: 8px;
-}
+    .logo {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 8px rgba(255, 255, 255, 0.3);
+    }
 
-.supported-coins {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 20px;
-}
+    .subtitle {
+      font-size: 14px;
+      opacity: 0.85;
+      margin-top: 4px;
+    }
 
-.supported-title {
-  font-weight: 600;
-  margin-bottom: 8px;
-  font-size: 14px;
-}
+    /* ===== Instructions / Cards ===== */
+    .instructions,
+    #manual-check {
+      padding: 18px;
+      margin-bottom: 20px;
+    }
 
-.coin-list {
-  font-size: 13px;
-  line-height: 1.4;
-  opacity: 0.9;
-}
+    .step {
+      margin-bottom: 10px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
 
-.footer {
-  text-align: center;
-  font-size: 12px;
-  opacity: 0.7;
-}
+    .step:last-child {
+      margin-bottom: 0;
+    }
 
-.highlight {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 500;
-}
+    .step-number {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+      margin-right: 8px;
+      color: #fff;
+    }
 
+    .highlight {
+      background: rgba(255, 255, 255, 0.25);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    /* ===== Input Section ===== */
+    input {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      outline: none;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    input:focus {
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    button {
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    #check-btn {
+      background: rgba(255, 255, 255, 0.85);
+      color: #4a3db8;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    #check-btn:hover {
+      background: #fff;
+      transform: scale(1.03);
+    }
+
+    .ticker-btn {
+      background: rgba(255, 255, 255, 0.18);
+      border: none;
+      color: #fff;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.08);
+    }
+
+    .ticker-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      opacity: 0.75;
+      margin-top: 12px;
+    }
+
+    .footer a {
+      color: rgba(255, 255, 255, 0.65);
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .footer a:hover {
+      color: rgba(255, 255, 255, 0.9);
+    }
   </style>
 </head>
 <body>
   <div class="header">
     <div class="logo">₿ Crypto Price Checker</div>
-    <div class="subtitle">Kiểm tra giá coin nhanh chóng</div>
+    <div class="subtitle">Check price of crypto ticker you see on your screen</div>
   </div>
 
-  <div class="instructions">
-    <div class="step">
-      <span class="step-number">1</span>
-      Bôi đen ký hiệu coin (VD: BTC, ETH...)
-    </div>
-    <div class="step">
-      <span class="step-number">2</span>
-      Nhấp chuột phải
-    </div>
-    <div class="step">
-      <span class="step-number">3</span>
-      Chọn <span class="highlight">"Xem giá coin"</span>
-    </div>
+  <div class="instructions glass">
+    <div class="step"><span class="step-number">1</span>Highlight the crypto ticker you see on your screen (Ex: BTC, ETH...)</div>
+    <div class="step"><span class="step-number">2</span>Right-click</div>
+    <div class="step"><span class="step-number">3</span><span class="highlight">"Check price"</span></div>
   </div>
 
-  <div class="supported-coins">
-    <div class="supported-title">Hỗ trợ các coin phổ biến:</div>
-    <div class="coin-list">
-      BTC, ETH, BNB, ADA, SOL, XRP, DOT, DOGE, AVAX, MATIC, LINK, UNI, LTC, BCH, ALGO, VET, FIL, ICP, ATOM, ETC, XLM, và nhiều coin khác...
-    </div>
-  </div>
-
-  <div id="manual-check" style="background: rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 12px; margin-bottom: 16px;">
-    <div style="font-weight:600; font-size:14px; margin-bottom:8px;">Tự nhập ký hiệu coin</div>
+  <div id="manual-check" class="glass">
+    <div style="font-weight:600; font-size:14px; margin-bottom:8px;">Input ticker</div>
     <div style="display:flex; gap:8px;">
-      <input id="ticker-input" type="text" placeholder="VD: BTC, ETH" style="flex:1; padding:8px 10px; border-radius:6px; border:none; outline:none; font-size:14px;">
-      <button id="check-btn" style="background:#ffffff; color:#4a3db8; border:none; border-radius:6px; padding:8px 12px; font-weight:600; cursor:pointer;">OK</button>
+      <input id="ticker-input" type="text" placeholder="e.g. BTC, ETH">
+      <button id="check-btn">Check</button>
     </div>
-    <div id="result" style="margin-top:10px; font-size:14px; min-height:18px; opacity:0.95;"></div>
+    <div style="display:flex; align-items:center; gap:8px; margin-top:10px;">
+      <div id="result" style="font-size:14px; min-height:18px; flex:1;"></div>
+    </div>
+    <div style="margin-top:12px;">
+      <div style="font-size:13px; opacity:0.85; margin-bottom:8px;">Popular tickers:</div>
+      <div id="popular-tickers" style="display:flex; gap:6px; flex-wrap:wrap;">
+        <button class="ticker-btn" data-symbol="BTC">BTC</button>
+        <button class="ticker-btn" data-symbol="ETH">ETH</button>
+        <button class="ticker-btn" data-symbol="SOL">SOL</button>
+      </div>
+    </div>
   </div>
 
   <div class="footer">
-    Dữ liệu từ CoinGecko API
+    Data from CoinGecko API
+    <div style="margin-top:6px;">
+      <a href="privacy.html" target="_blank">Privacy policy</a>
+    </div>
   </div>
-  <div style="text-align: center; margin-top: 8px;">
-    <a href="privacy.html" target="_blank" style="color: rgba(255,255,255,0.6); text-decoration: none; font-size: 11px;">Chính sách bảo mật</a>
   </div>
+  
   <script src="popup.js"></script>
 </body>
 </html>

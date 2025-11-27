@@ -1,14 +1,21 @@
 {
   "manifest_version": 3,
-  "name": "Crypto Price Peek",
-  "version": "1.2.0",
-  "description": "Highlight a coin symbol (BTC, ETH, WLD...), right-click to view its USD price from CoinGecko in a small pop-up directly on the page.",
+  "name": "Crypto Quick Check Tooltip",
+  "version": "5.0.0",
+  "description": "Highlight ticker (BTC,ETH.), right-click to see price. Chrome Extension page blocks extensions. Use the extension on other websites",
   "permissions": [
     "contextMenus",
-    "activeTab"
+    "activeTab",
+    "scripting"
   ],
   "host_permissions": [
     "https://api.coingecko.com/*"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["coingeckoid.csv"],
+      "matches": ["<all_urls>"]
+    }
   ],
   "icons": {
     "16": "icons/icon16.png",
